@@ -1,0 +1,160 @@
+Задание 1 - Docker CLI
+
+-----------------------------------------------
+1. Загрузите образ busybox последней версии
+-----------------------------------------------
+mac@MacBook-Pro-Alena ejs % docker run -it busybox /bin/sh
+Unable to find image 'busybox:latest' locally
+latest: Pulling from library/busybox
+835f85a6d665: Pull complete 
+Digest: sha256:c230832bd3b0be59a6c47ed64294f9ce71e91b327957920b6929a0caa8353140
+Status: Downloaded newer image for busybox:latest
+-----------------------------------------------
+2. Запустите новый контейнер busybox с командой ping сайта netology.ru, и количеством пингов 7, поименуйте контейнер pinger
+-----------------------------------------------
+mac@MacBook-Pro-Alena ejs % docker run --name pinger -it busybox ping -c 7 netology.ru 
+PING netology.ru (188.114.99.224): 56 data bytes
+64 bytes from 188.114.99.224: seq=0 ttl=63 time=106.045 ms
+64 bytes from 188.114.99.224: seq=1 ttl=63 time=71.931 ms
+64 bytes from 188.114.99.224: seq=2 ttl=63 time=101.553 ms
+64 bytes from 188.114.99.224: seq=3 ttl=63 time=95.079 ms
+64 bytes from 188.114.99.224: seq=5 ttl=63 time=89.754 ms
+64 bytes from 188.114.99.224: seq=6 ttl=63 time=81.931 ms
+
+--- netology.ru ping statistics ---
+7 packets transmitted, 6 packets received, 14% packet loss
+round-trip min/avg/max = 71.931/91.048/106.045 ms
+-----------------------------------------------
+3. Выведите список всех контейнеров - запущенных и остановленных
+-----------------------------------------------
+mac@MacBook-Pro-Alena ejs % docker ps
+CONTAINER ID   IMAGE           COMMAND                  CREATED        STATUS        PORTS                    NAMES
+94f1d207d659   busybox         "/bin/sh"                25 hours ago   Up 25 hours                            busy_hoover
+7d29d996c3e3   mongo-express   "/sbin/tini -- /dock…"   5 weeks ago    Up 26 hours   0.0.0.0:8081->8081/tcp   ejs-mongo-express-1
+b0fa85652ead   mongo           "docker-entrypoint.s…"   5 weeks ago    Up 26 hours   27017/tcp                ejs-mongo-1
+mac@MacBook-Pro-Alena ejs % docker ps -a
+CONTAINER ID   IMAGE                             COMMAND                  CREATED         STATUS                     PORTS                    NAMES
+23aec8a6adf1   busybox                           "ping -c 7 netology.…"   2 minutes ago   Exited (0) 2 minutes ago                            pinger
+94f1d207d659   busybox                           "/bin/sh"                25 hours ago    Up 25 hours                                         busy_hoover
+7d29d996c3e3   mongo-express                     "/sbin/tini -- /dock…"   5 weeks ago     Up 26 hours                0.0.0.0:8081->8081/tcp   ejs-mongo-express-1
+b0fa85652ead   mongo                             "docker-entrypoint.s…"   5 weeks ago     Up 26 hours                27017/tcp                ejs-mongo-1
+88fb5a25b8f4   docker/welcome-to-docker:latest   "/docker-entrypoint.…"   6 weeks ago     Exited (0) 6 weeks ago                              welcome-to-docker
+-----------------------------------------------
+4. Выведите на экран логи контейнера с именем pinger
+-----------------------------------------------
+mac@MacBook-Pro-Alena ejs % docker logs pinger
+PING netology.ru (188.114.99.224): 56 data bytes
+64 bytes from 188.114.99.224: seq=0 ttl=63 time=106.045 ms
+64 bytes from 188.114.99.224: seq=1 ttl=63 time=71.931 ms
+64 bytes from 188.114.99.224: seq=2 ttl=63 time=101.553 ms
+64 bytes from 188.114.99.224: seq=3 ttl=63 time=95.079 ms
+64 bytes from 188.114.99.224: seq=5 ttl=63 time=89.754 ms
+64 bytes from 188.114.99.224: seq=6 ttl=63 time=81.931 ms
+
+--- netology.ru ping statistics ---
+7 packets transmitted, 6 packets received, 14% packet loss
+round-trip min/avg/max = 71.931/91.048/106.045 ms
+-----------------------------------------------
+5. Запустите второй раз контейнер с именем pinger
+-----------------------------------------------
+mac@MacBook-Pro-Alena ejs % docker stop pinger
+pinger
+mac@MacBook-Pro-Alena ejs % docker start pinger
+pinger
+-----------------------------------------------
+6. Выведите список всех контейнеров - запущенных и остановленных
+-----------------------------------------------
+mac@MacBook-Pro-Alena ejs % docker ps                                                  
+CONTAINER ID   IMAGE           COMMAND                  CREATED        STATUS        PORTS                    NAMES
+94f1d207d659   busybox         "/bin/sh"                25 hours ago   Up 25 hours                            busy_hoover
+7d29d996c3e3   mongo-express   "/sbin/tini -- /dock…"   5 weeks ago    Up 26 hours   0.0.0.0:8081->8081/tcp   ejs-mongo-express-1
+b0fa85652ead   mongo           "docker-entrypoint.s…"   5 weeks ago    Up 26 hours   27017/tcp                ejs-mongo-1
+mac@MacBook-Pro-Alena ejs % docker ps -a                                               
+CONTAINER ID   IMAGE                             COMMAND                  CREATED          STATUS                      PORTS                    NAMES
+23aec8a6adf1   busybox                           "ping -c 7 netology.…"   14 minutes ago   Exited (0) 34 seconds ago                            pinger
+94f1d207d659   busybox                           "/bin/sh"                25 hours ago     Up 25 hours                                          busy_hoover
+7d29d996c3e3   mongo-express                     "/sbin/tini -- /dock…"   5 weeks ago      Up 26 hours                 0.0.0.0:8081->8081/tcp   ejs-mongo-express-1
+b0fa85652ead   mongo                             "docker-entrypoint.s…"   5 weeks ago      Up 26 hours                 27017/tcp                ejs-mongo-1
+88fb5a25b8f4   docker/welcome-to-docker:latest   "/docker-entrypoint.…"   6 weeks ago      Exited (0) 6 weeks ago                               welcome-to-docker
+mac@MacBook-Pro-Alena ejs % 
+-----------------------------------------------
+7. Выведите на экран логи контейнера с именем pinger
+-----------------------------------------------
+mac@MacBook-Pro-Alena ejs % docker logs pinger                                         
+PING netology.ru (188.114.99.224): 56 data bytes
+64 bytes from 188.114.99.224: seq=0 ttl=63 time=106.045 ms
+64 bytes from 188.114.99.224: seq=1 ttl=63 time=71.931 ms
+64 bytes from 188.114.99.224: seq=2 ttl=63 time=101.553 ms
+64 bytes from 188.114.99.224: seq=3 ttl=63 time=95.079 ms
+64 bytes from 188.114.99.224: seq=5 ttl=63 time=89.754 ms
+64 bytes from 188.114.99.224: seq=6 ttl=63 time=81.931 ms
+
+--- netology.ru ping statistics ---
+7 packets transmitted, 6 packets received, 14% packet loss
+round-trip min/avg/max = 71.931/91.048/106.045 ms
+PING netology.ru (188.114.98.224): 56 data bytes
+64 bytes from 188.114.98.224: seq=0 ttl=63 time=88.683 ms
+64 bytes from 188.114.98.224: seq=1 ttl=63 time=80.846 ms
+64 bytes from 188.114.98.224: seq=2 ttl=63 time=79.093 ms
+64 bytes from 188.114.98.224: seq=3 ttl=63 time=80.732 ms
+64 bytes from 188.114.98.224: seq=4 ttl=63 time=67.311 ms
+64 bytes from 188.114.98.224: seq=5 ttl=63 time=101.726 ms
+64 bytes from 188.114.98.224: seq=6 ttl=63 time=99.327 ms
+
+--- netology.ru ping statistics ---
+7 packets transmitted, 7 packets received, 0% packet loss
+round-trip min/avg/max = 67.311/85.388/101.726 ms
+-----------------------------------------------
+8. Определите по логам общее количество запусков команды ping и какое общее количество отправленых запросов
+-----------------------------------------------
+общее количество запусков команды ping - 2;
+общее количество отправленых запросов - 14;
+-----------------------------------------------
+9. Удалите контейнер с именем pinger
+-----------------------------------------------
+mac@MacBook-Pro-Alena ejs % docker rm -f pinger
+pinger
+-----------------------------------------------
+10. Удалите образ busybox
+-----------------------------------------------
+mac@MacBook-Pro-Alena ejs % docker rmi busybox
+Error response from daemon: conflict: unable to remove repository reference "busybox" (must force) - container 94f1d207d659 is using its referenced image 7db2ddde018a
+mac@MacBook-Pro-Alena ejs % docker rmi $(docker images -a -q)
+Untagged: welcome-to-docker:latest
+Deleted: sha256:0ce4a04a9a52e05da3e9e7675d3be687caa430d7a05a0051a7061cfbddefd219
+Error response from daemon: conflict: unable to delete 4b372541400c (cannot be forced) - image is being used by running container b0fa85652ead
+Error response from daemon: conflict: unable to delete 1133e12468c7 (cannot be forced) - image is being used by running container 7d29d996c3e3
+Error response from daemon: conflict: unable to delete 648f93a1ba7d (must be forced) - image is being used by stopped container 88fb5a25b8f4
+Error response from daemon: conflict: unable to delete 7db2ddde018a (cannot be forced) - image is being used by running container 94f1d207d659
+mac@MacBook-Pro-Alena ejs % docker stop $(docker ps -a -q) && docker rm $(docker ps -a -q)
+94f1d207d659
+7d29d996c3e3
+b0fa85652ead
+88fb5a25b8f4
+94f1d207d659
+7d29d996c3e3
+b0fa85652ead
+88fb5a25b8f4
+mac@MacBook-Pro-Alena ejs % docker images -a
+REPOSITORY                 TAG       IMAGE ID       CREATED         SIZE
+mongo                      latest    4b372541400c   2 months ago    761MB
+mongo-express              latest    1133e12468c7   6 months ago    182MB
+docker/welcome-to-docker   latest    648f93a1ba7d   10 months ago   19MB
+busybox                    latest    7db2ddde018a   16 months ago   4.04MB
+mac@MacBook-Pro-Alena ejs % docker rmi busybox
+Untagged: busybox:latest
+Untagged: busybox@sha256:c230832bd3b0be59a6c47ed64294f9ce71e91b327957920b6929a0caa8353140
+Deleted: sha256:7db2ddde018a2a56e929855445bc7f30bc83db514a23404bd465a07d2770ac5f
+Deleted: sha256:79c1b9a6179fba0e741a5a5c37d1e3ff558aa2c3251ba4ad9ab80edcb5693545
+mac@MacBook-Pro-Alena ejs % docker images
+REPOSITORY                 TAG       IMAGE ID       CREATED         SIZE
+mongo                      latest    4b372541400c   2 months ago    761MB
+mongo-express              latest    1133e12468c7   6 months ago    182MB
+docker/welcome-to-docker   latest    648f93a1ba7d   10 months ago   19MB
+
+
+
+
+
+
+
