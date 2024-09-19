@@ -1,0 +1,82 @@
+Задание 2 - Environment Variables
+Используя Docker CLI выполните следующие действия:
+
+-----------------------------------------------
+1. Загрузите образ node версии 15.14
+-----------------------------------------------
+mac@MacBook-Pro-Alena ejs % docker pull node        
+Using default tag: latest
+latest: Pulling from library/node
+56c9b9253ff9: Pull complete 
+364d19f59f69: Pull complete 
+843b1d832182: Pull complete 
+a348c2a8d946: Pull complete 
+9216d06711c8: Pull complete 
+88676069abd2: Pull complete 
+861c5fc6dea3: Pull complete 
+6292ac7cf944: Pull complete 
+Digest: sha256:cbe2d5f94110cea9817dd8c5809d05df49b4bd1aac5203f3594d88665ad37988
+Status: Downloaded newer image for node:latest
+docker.io/library/node:latest
+
+What's next:
+    View a summary of image vulnerabilities and recommendations → docker scout quickview node
+mac@MacBook-Pro-Alena ejs % docker images           
+REPOSITORY                 TAG       IMAGE ID       CREATED         SIZE
+node                       latest    2bff5c0d9746   38 hours ago    1.11GB
+mongo                      latest    4b372541400c   2 months ago    761MB
+mongo-express              latest    1133e12468c7   6 months ago    182MB
+docker/welcome-to-docker   latest    648f93a1ba7d   10 months ago   19MB
+mac@MacBook-Pro-Alena ejs % node --version
+v20.11.1
+-----------------------------------------------
+2. Запустите контейнер node в интерактивном режиме подключения терминала, поименуйте его mynode, передайте две переменные среды NAME=<ваше имя> и SURNAME=<ваша фамилия>
+-----------------------------------------------
+mac@MacBook-Pro-Alena ejs % docker run --name mynode -it -e NAME=alyona -e SURNAME=laskina node:20.11.1
+Welcome to Node.js v20.11.1.
+Type ".help" for more information.
+-----------------------------------------------
+3. В интерактивной среде выполнения node выполните скрипт, который выведет на экран приветствие: Привет, <ваше имя> <ваша фамилия>!, эти данные должны быть получены из переменных среды
+-----------------------------------------------
+> console.log(`Привет, ${process.env.NAME} ${process.env.SURNAME}!`)
+Привет, alyona laskina!
+undefined
+-----------------------------------------------
+4. Остановите контейнер
+-----------------------------------------------
+mac@MacBook-Pro-Alena ejs % docker stop mynode                                                         
+mynode
+-----------------------------------------------
+5. Удалите образ node версии 15.14
+-----------------------------------------------
+mac@MacBook-Pro-Alena ejs % docker stop $(docker ps -a -q) && docker rm $(docker ps -a -q)
+c9c6d197592d
+e6c62519b0ea
+ee84ade58bf8
+a95bfb371256
+9449d669fe9a
+c9c6d197592d
+e6c62519b0ea
+ee84ade58bf8
+a95bfb371256
+9449d669fe9a
+mac@MacBook-Pro-Alena ejs % docker rmi node:20.11.1                                       
+Untagged: node:20.11.1
+Untagged: node@sha256:e06aae17c40c7a6b5296ca6f942a02e6737ae61bbbf3e2158624bb0f887991b5
+Deleted: sha256:5481354c334b833e9d86f7095a51b34aa17b67d731bd5998f2407262a8509dc8
+Deleted: sha256:8df7130a2889769b1a7b7678b8c9706ea960bdff16285aaab163b9f60a7540bc
+Deleted: sha256:23450f6b59d7284fc0a96498b8aa6a6c8c2df14e1838657e4d54000000aa8893
+Deleted: sha256:21dcef91e497d7ce848a572476832c8f4e6a41866b509a04b9541c7081d6dc7d
+Deleted: sha256:58bbf20c0d42021f5b16d7e83165e8c5fd8ab544d551b87459c616f13e5ad1de
+Deleted: sha256:ee86e6a99577e2f6237d9a5ef06c8ce6a42d5a743372aa6d04fdb6a5ab256683
+Deleted: sha256:e7c7154211c915bebc6a85bdc16606b4ac71101ffd689885cc838b5bcca4531e
+Deleted: sha256:0cbe2d374fe0eb0e42043bae3526579988cdbee59c51febd0d7bcb9fdf80297a
+Deleted: sha256:59bd0a52c319f616f530f7a43eeb3e6e7827939469cb7e726d01a2dbc5fba0ef
+mac@MacBook-Pro-Alena ejs % docker images -a                                              
+REPOSITORY                 TAG       IMAGE ID       CREATED         SIZE
+mongo                      latest    4b372541400c   2 months ago    761MB
+mongo-express              latest    1133e12468c7   6 months ago    182MB
+docker/welcome-to-docker   latest    648f93a1ba7d   10 months ago   19MB
+
+
+
