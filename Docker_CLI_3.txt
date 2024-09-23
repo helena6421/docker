@@ -30,29 +30,35 @@ node                       15.14     c9b1cc6b5379   3 years ago     885MB
 -----------------------------------------------
 2. Запустите контейнер с именем first_node из образа node версии 15.14 в фоновом режиме, подключив папку data из текущей директории в /var/first/data контейнера
 -----------------------------------------------
-mac@MacBook-Pro-Alena ejs % docker run -d --name first_node -v ~/git/ejs/var/first/data:/data node:15.14 /bin/bash sleep infinity 
-b4be6f9650bd44ea35b757053ccf92ff4798d3b6781f061d32bcaade14f25223
+mac@MacBook-Pro-Alena ejs % docker run --name first_node -d -v $(pwd)/var/first/data:/var/first/data node:15.14 sleep infinity 
+7c4129e689d1431e418b1a7b9dd9f5f3657f031013f0aedd0cadee19443b3fb5
 -----------------------------------------------
 3. Запустите контейнер с именем second_node из образа node версии 15.14 в фоновом режиме, подключив папку data из текущей директории в /var/second/data контейнера
 -----------------------------------------------
-mac@MacBook-Pro-Alena ejs % docker run -d --name second_node -v ~/git/ejs/var/second/data:/data node:15.14 /bin/bash sleep infinity
-50fd83a247e147e5afdeb1bd2aeee76ebd6c2c3ccb8ebe0be3a12c17e3098857
+mac@MacBook-Pro-Alena ejs % docker run --name second_node -d -v $(pwd)/var/second/data:/var/second/data node:15.14 sleep infinity
+740db56c4fef4ab3ba680262920715eca95942d893ae1f3948084244c330d4cb
 -----------------------------------------------
 4. Подключитесь к контейнеру first_node с помощью exec и создайте текстовый файл любого содержания в /var/first/data
 -----------------------------------------------
-mac@MacBook-Pro-Alena ejs % docker run -it --name first_node -v ~/git/ejs/var/first/data:/data node:15.14 /bin/bash  
-root@a06c0b939fa9:/# touch data/test1.txt
-root@a06c0b939fa9:/# echo Hello > data/test1.txt
+mac@MacBook-Pro-Alena ejs % docker exec -it first_node sh
+# touch var/first/data/test1.txt
+# echo Hello > var/first/data/test1.txt
 -----------------------------------------------
 5. Добавьте еще один файл в папку data на хостовой машине
 -----------------------------------------------
-Добавила var/second/data/test.txt
+Добавила var/first/data/test.txt
+и ещё var/second/data/test.txt
 -----------------------------------------------
 6. Подключитесь к контейнеру second_node с помощью exec и получите список файлов в директории /var/second/data, выведете на экран содержимое файлов
 -----------------------------------------------
-mac@MacBook-Pro-Alena ejs % docker run -it --name second_node -v ~/git/ejs/var/second/data:/data node:15.14 /bin/bash  
-root@796ae459db84:/# ls /data/
+mac@MacBook-Pro-Alena ejs % docker exec -it second_node sh
+# ls var/second/data
 test.txt
+
+Если удалить файл test.txt из var/second/data, то будет так:
+mac@MacBook-Pro-Alena ejs % docker exec -it second_node sh
+# ls var/second/data
+# 
 -----------------------------------------------
 7. Остановите оба контейнера
 -----------------------------------------------
